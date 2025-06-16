@@ -42,7 +42,7 @@ Quantum Error Correction (QEC) addresses this challenge by encoding quantum info
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{shorcode_with_correction.png}
+    \includegraphics[width=0.8\textwidth]{images/shorcode_with_correction.png}
     \caption{Quantum circuit implementing the Shor code with error correction.}
     \label{fig:shor_circuit}
 \end{figure}
@@ -346,24 +346,6 @@ When performing bit- and phase-flip parity-check measurements, the quantum state
 
 This remarkable property allows us to correct a continuum of errors by performing only bit- and phase-flip checks, addressing the challenge of continuous error spaces in quantum systems.
 
-\subsubsection{The Depolarizing Channel and Error Suppression}
-
-The depolarizing channel is a quantum noise model in which a qubit is:
-\begin{itemize}
-\item Left unchanged with probability $1-p_e$
-\item Experiences a bit-flip (X error) with probability $p_e/3$
-\item Experiences a phase-flip (Z error) with probability $p_e/3$
-\item Experiences both a bit- and phase-flip (Y error) with probability $p_e/3$
-\end{itemize}
-
-This can be mathematically represented as:
-
-\begin{equation}
-\mathcal{E}(\rho) = (1-p_e)\rho + \frac{p_e}{3}(X\rho X + Y\rho Y + Z\rho Z)
-\end{equation}
-
-Similar to classical error correction, the Shor code suppresses errors in the depolarizing channel from $p_e$ to $O(p^2_e)$. This principle is effective in the low-noise setting because multiple errors are much less likely than single errors.
-
 \begin{figure}[H]
     \centering
     \begin{tikzpicture}[node distance=1.5cm, every node/.style={rectangle, draw, minimum width=2.5cm, minimum height=0.8cm}]
@@ -417,7 +399,7 @@ The decoding process essentially reverses these operations, with additional step
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{test1_bit_flip_correction.png}
+    \includegraphics[width=0.7\textwidth]{images/test1_bit_flip_correction.png}
     \caption{Circuit diagram for Test 1: Bit-flip error correction.}
     \label{fig:bit_flip_circuit}
 \end{figure}
@@ -430,8 +412,16 @@ In this experiment, a bit-flip error was injected on a single qubit of an encode
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{test1_bit_flip_correction.png}
-    \caption{Measurement results for bit-flip error correction.}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{images/test1_bit_flip_correction.png}
+        \caption{Circuit results for bit-flip error correction.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{images/test1_bit_flip_histogram.png}
+        \caption{Measurement histogram for bit-flip error correction.}
+    \end{subfigure}
+    \caption{Results for Test 1: Bit-flip error correction experiment.}
     \label{fig:bit_flip_results}
 \end{figure}
 
@@ -443,21 +433,37 @@ Using an encoded $|+\rangle$ state (which is sensitive to phase errors), we inje
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{test2_phase_flip_correction.png}
-    \caption{Measurement results for phase-flip error correction.}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{images/test2_phase_flip_correction.png}
+        \caption{Circuit results for phase-flip error correction.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{images/test2_phase_flip_histogram.png}
+        \caption{Measurement histogram for phase-flip error correction.}
+    \end{subfigure}
+    \caption{Results for Test 2: Phase-flip error correction experiment.}
     \label{fig:phase_flip_results}
 \end{figure}
 
 Measurements showed a high probability of recovering the expected state, validating the code's phase-flip correction capabilities.
 
-\subsection{Test 3: Combined Bit and Phase-Flip (Y Error) Correction}
+\subsection{Test 3: Y Error Correction}
 
-This test injected a Y error (equivalent to both X and Z errors) on a single qubit of an encoded $|+\rangle$ state. Despite this combined error, the Shor code successfully corrected it.
+This test injected a Y error (equivalent to both X and Z errors) on a single qubit of an encoded state. Despite this combined error, the Shor code successfully corrected it.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{test3_y_error_correction.png}
-    \caption{Measurement results for Y error correction.}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{images/test3_y_error_correction.png}
+        \caption{Circuit results for Y error correction.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{images/test3_y_error_histogram.png}
+        \caption{Measurement histogram for Y error correction.}
+    \end{subfigure}
+    \caption{Results for Test 3: Y error correction experiment.}
     \label{fig:y_error_results}
 \end{figure}
 
@@ -469,134 +475,20 @@ To explore the code's limitations, errors were injected on multiple qubits simul
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{test4_multiple_errors.png}
-    \caption{Measurement results when multiple errors exceed correction capability.}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{images/test4_multiple_errors.png}
+        \caption{Circuit results for multiple errors.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{images/test4_multiple_errors_histogram.png}
+        \caption{Measurement histogram for multiple errors.}
+    \end{subfigure}
+    \caption{Results for Test 4: Multiple errors experiment.}
     \label{fig:multiple_errors_results}
 \end{figure}
 
-The results showed a significant probability of measuring the incorrect state, confirming that the Shor code can correct at most one error of each type. This limitation is inherent in the code's design, as it's a distance-3 code.
-
-\subsection{Test 5: Random Error Injection (Statistical Analysis)}
-
-This test performed statistical analysis by randomly injecting single-qubit errors of different types (X, Z, Y) at random positions, then measuring recovery rates.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{test5_random_error_statistics.png}
-    \caption{Success rates for different error types in random error injection test.}
-    \label{fig:random_error_stats}
-\end{figure}
-
-Results showed consistently high success rates across all error types, with minimal variation between bit-flip, phase-flip, and combined errors. This validates the code's robustness against arbitrary single-qubit errors.
-
-\subsection{Test 6: IBM Noise Model Simulation}
-
-To assess performance under realistic conditions, we simulated the Shor code under an IBM quantum hardware noise model with varying noise levels:
-
-\begin{enumerate}
-    \item \textbf{Low Noise}: Depolarizing probability = 0.001, T1 = 50μs, T2 = 30μs
-    \item \textbf{Medium Noise}: Depolarizing probability = 0.005, T1 = 30μs, T2 = 20μs
-    \item \textbf{High Noise}: Depolarizing probability = 0.01, T1 = 20μs, T2 = 10μs
-\end{enumerate}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{test6_noise_model_comparison.png}
-    \caption{Comparison of Shor code performance under different noise levels.}
-    \label{fig:noise_model_comparison}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{test6_overall_noise_performance.png}
-    \caption{Overall Shor code performance by noise level.}
-    \label{fig:overall_noise_performance}
-\end{figure}
-
-The results showed:
-\begin{itemize}
-    \item High success rates under low noise conditions
-    \item Gradually decreasing performance as noise increased
-    \item Continued error correction benefits even under high noise
-\end{itemize}
-
-This demonstrates that the Shor code provides practical error correction capabilities in realistic quantum computing environments, although its effectiveness diminishes with increasing noise.
-
-\subsection{Test 7: Targeted Error Correction with Varying Probabilities}
-
-The final test examined how the Shor code performs against errors occurring with varying probabilities (from 0\% to 100\%). We compared four error types:
-\begin{itemize}
-    \item Bit-flip (X)
-    \item Phase-flip (Z)
-    \item Combined (Y)
-    \item Depolarizing errors
-\end{itemize}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{test7_error_correction_performance.png}
-    \caption{Success rates for different error types across varying error probabilities.}
-    \label{fig:error_correction_performance}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{test7_correction_vs_no_correction.png}
-    \caption{Comparison of Shor code performance versus no error correction.}
-    \label{fig:correction_vs_no_correction}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{test7_x_error_targeted.png}
-        \caption{X error (bit-flip)}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{test7_z_error_targeted.png}
-        \caption{Z error (phase-flip)}
-    \end{subfigure}
-    
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{test7_y_error_targeted.png}
-        \caption{Y error (combined bit and phase-flip)}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{test7_depol_error_targeted.png}
-        \caption{Depolarizing error}
-    \end{subfigure}
-    \caption{Targeted error circuits for different error types.}
-    \label{fig:targeted_errors}
-\end{figure}
-
-The results were plotted against theoretical performance without error correction, revealing:
-\begin{itemize}
-    \item The Shor code maintains high success rates even as error probabilities increase
-    \item Without error correction, success rates decline linearly with error probability for bit-flip errors:
-    
-    \begin{equation}
-        P_{success}(no~correction) = 1-p \text{ for X errors}
-    \end{equation}
-    
-    \begin{equation}
-        P_{success}(no~correction) = 1 \text{ for Z errors on } |0\rangle \text{ (since } |0\rangle \text{ is an eigenstate of Z)}
-    \end{equation}
-    
-    \begin{equation}
-        P_{success}(no~correction) = 1-p \text{ for Y errors}
-    \end{equation}
-    
-    \begin{equation}
-        P_{success}(no~correction) = 1-\frac{2p}{3} \text{ for depolarizing noise}
-    \end{equation}
-
-    \item The advantage of the Shor code is most pronounced at moderate error rates (20\%-80\%)
-    \item At very high error rates (>80\%), the advantage diminishes
-\end{itemize}
-
-This confirms the theoretical predictions and demonstrates the practical value of quantum error correction in mitigating errors across a wide range of probabilities.
+The results showed a significant probability of measuring incorrect states, confirming that the Shor code can correct at most one error of each type. This limitation is inherent in the code's design, as it's a distance-3 code.
 
 \section{Analysis and Discussion}
 

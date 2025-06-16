@@ -57,6 +57,15 @@ The tests will generate:
 - Circuit diagrams saved as PNG files in the `images/` directory
 - Performance plots and statistics for each test
 
+## Test Files
+
+- `test1_bit_flip.py`: Tests correction of X (bit flip) errors
+- `test2_phase_flip.py`: Tests correction of Z (phase flip) errors
+- `test3_y_error.py`: Tests correction of Y (combined bit and phase flip) errors
+- `test4_multiple_errors.py`: Tests behavior with multiple errors (beyond correction capability)
+- `test5_noise_model.py`: Tests with IBM quantum hardware noise model
+- `test6_targeted_errors.py`: Tests with targeted error correction
+
 ## Test Descriptions
 
 1. **Bit Flip Test**: Tests the code's ability to correct X errors
