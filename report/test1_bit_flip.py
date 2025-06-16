@@ -36,7 +36,7 @@ def run_test():
 
     # Execute and get results
     counts = run_circuit(circuit)
-    plot_results(counts, "Test 1: Bit Flip Correction Results")
+    plot_results(counts, "Test 1: Bit Flip Correction Results", "test1_bit_flip_histogram")
 
     # Calculate fidelity between ideal and corrupted state
     bit_flip_fidelity = state_fidelity(ideal_sv, corrupted_sv)

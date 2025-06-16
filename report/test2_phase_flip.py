@@ -41,7 +41,7 @@ def run_test():
 
     # Execute and get results
     counts = run_circuit(circuit)
-    plot_results(counts, "Test 2: Phase Flip Correction Results")
+    plot_results(counts, "Test 2: Phase Flip Correction Results", "test2_phase_flip_histogram")
 
     # Calculate fidelity between ideal and corrupted state
     phase_flip_fidelity = state_fidelity(ideal_sv, corrupted_sv)

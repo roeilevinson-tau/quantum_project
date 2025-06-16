@@ -62,26 +62,34 @@ def create_shor_encoded_state(initial_state=[1, 0]):
 # Define a function to decode the Shor code
 def decode_shor_code(circuit, q, c):
     """Add decoding operations to the circuit"""
-    # Decoding
-    circuit.cx(q[0], q[1])
+    # First level of error correction - correct bit flips within each block
+    # Block 1
+    circuit.cx(q[0], q[1])  # Compare q[0] and q[1]
+    circuit.cx(q[0], q[2])  # Compare q[0] and q[2]
+    circuit.ccx(q[1], q[2], q[0])  # Majority vote
+    
+    # Block 2
     circuit.cx(q[3], q[4])
-    circuit.cx(q[6], q[7])
-    
-    circuit.cx(q[0], q[2])
     circuit.cx(q[3], q[5])
-    circuit.cx(q[6], q[8])
-    
-    circuit.ccx(q[1], q[2], q[0])
     circuit.ccx(q[4], q[5], q[3])
+    
+    # Block 3
+    circuit.cx(q[6], q[7])
+    circuit.cx(q[6], q[8])
     circuit.ccx(q[7], q[8], q[6])
     
+    # Convert to phase basis for phase error correction
     circuit.h(q[0])
     circuit.h(q[3])
     circuit.h(q[6])
     
-    circuit.cx(q[0], q[3])
+    # Second level - correct phase flips
+    circuit.cx(q[0], q[3])  # Compare blocks
     circuit.cx(q[0], q[6])
-    circuit.ccx(q[3], q[6], q[0])
+    circuit.ccx(q[3], q[6], q[0])  # Majority vote
+    
+    # Convert back to computational basis
+    circuit.h(q[0])
     
     return circuit
 
@@ -97,7 +105,7 @@ def get_statevector(circuit):
     return job.result().get_statevector()
 
 # Function to visualize results
-def plot_results(results_dict, title):
+def plot_results(results_dict, title, filename=None):
     labels = list(results_dict.keys())
     values = list(results_dict.values())
     
@@ -106,5 +114,7 @@ def plot_results(results_dict, title):
     plt.title(title)
     plt.ylabel('Counts')
     plt.xlabel('Measurement Outcome')
-    plt.savefig(get_image_path(f"{title.replace(' ', '_')}.png"))
+    if filename is None:
+        filename = title.replace(' ', '_')
+    plt.savefig(get_image_path(f"{filename}.png"))
     plt.close() 
