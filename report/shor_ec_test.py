@@ -32,6 +32,7 @@ class ShorECTest:
         self.circuit = QuantumCircuit(self.q, self.c)
         
         # Initialize noise module
+        self._noise_module = None
         self.noise_module_init()
         
         # Build the circuit
@@ -39,7 +40,7 @@ class ShorECTest:
     
     def noise_module_init(self):
         """Initialize the noise module. Override this method to set up noise."""
-        self.noise_module = None
+        self._noise_module = None
     
     def _build_circuit(self):
         """Build the complete circuit with encoding, custom logic, and decoding."""
@@ -127,7 +128,7 @@ class ShorECTest:
     
     def run_simulation(self, shots=1000):
         """Run the circuit simulation and return the counts."""
-        job = execute(self.circuit, aer_sim, shots=shots, noise_model=self.noise_module)
+        job = execute(self.circuit, aer_sim, shots=shots, noise_model=self._noise_module)
         job_monitor(job)
         counts = job.result().get_counts()
         self.plot_results(counts, f"{self._test_name} Results", f"{self._test_name}_histogram")
@@ -169,17 +170,19 @@ class ShorECTest:
         Returns:
             bool: True if error correction was successful, False otherwise
         """
+
+        
         # Check if all measurements are 0
         all_zeros = all(int(key[-1]) == 0 for key in counts.keys())
         # If should_ec_fail is True, we expect failure (all_zeros should be False)
         # If should_ec_fail is False, we expect success (all_zeros should be True)
         success = all_zeros != self._should_ec_fail
-        
-        # Print colored result
-        if success:
-            print(f"{Fore.GREEN}Test Succeeded{Style.RESET_ALL}")
-        else:
-            print(f"{Fore.RED}Test Failed{Style.RESET_ALL}")
+        if self._should_ec_fail is not None:
+            # Print colored result
+            if success:
+                print(f"{Fore.GREEN}Test Succeeded{Style.RESET_ALL}")
+            else:
+                print(f"{Fore.RED}Test Failed{Style.RESET_ALL}")
             
         return success
 

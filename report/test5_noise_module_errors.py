@@ -1,71 +1,67 @@
-from utils import (
-    create_shor_encoded_state, decode_shor_code, get_statevector,
-    run_circuit, plot_results, get_image_path
-)
-from qiskit.quantum_info import state_fidelity
+from shor_ec_test import ShorECTest
 from qiskit.providers.aer.noise import NoiseModel, pauli_error
-from qiskit import execute, Aer
 import numpy as np
 
+class NoiseModuleTest(ShorECTest):
+    DEFAULT_TEST_NAME = "noise_module_test"
+    
+    def __init__(self, initial_state=[1, 0], test_name=None, should_ec_fail=False, p_err=0):
+        """
+        Initialize the noise module test.
+        
+        Args:
+            initial_state (list): List of 2 complex numbers for the |0⟩ and |1⟩ amplitudes
+            test_name (str): Name of the test for file naming
+            should_ec_fail (bool): Whether the error correction should fail
+            p_err (float): Probability of bit flip error (0 to 1)
+        """
+        self.p_err = p_err
+        super().__init__(initial_state, test_name, should_ec_fail)
+    
+    def noise_module_init(self):
+        """Initialize the noise module with bit flip errors."""
+        # Create noise model with bit flip errors
+        bit_flip_error = pauli_error([('X', self.p_err), ('I', 1 - self.p_err)])
+        self._noise_module = NoiseModel()
+        self._noise_module.add_all_qubit_quantum_error(bit_flip_error, ['id'])
+    
+    def custom_circuit_logic(self):
+        """Apply id gates to all qubits to introduce noise."""
+        for i in range(9):
+            self.circuit.id(self.q[i])
+        self.circuit.barrier(self.q)
+
+    def run_test(self):
+        """Test 5: Noise Module Errors"""
+        print("\n## Test 5: Noise Module Errors")
+        print("----------------------------\n")
+        print("This test demonstrates the Shor code's ability to correct errors introduced by a noise model")
+        print("that applies bit flip errors with a certain probability during id gates.\n")
+        
+        # Draw the circuit
+        self.draw()
+        
+        # Execute and get results
+        counts = self.run_simulation()
+        
+        # Calculate fidelity between ideal and corrupted state
+        noise_fidelity = self.get_state_fidelity()
+        
+        print(f"### Results:")
+        print(f"- Measurement results: {counts}")
+        print(f"- Fidelity between ideal and corrupted state: {noise_fidelity:.6f}")
+        print(f"- Expected outcome: Successful correction with high probability of measuring |0⟩")
+        print("\nConclusion: The Shor code successfully corrects errors introduced by the noise model.\n")
+        
+        return {
+            'counts': counts,
+            'fidelity': noise_fidelity
+        }
+
 def run_test():
-    """Test 5: Noise Module Errors"""
-    print("\n## Test 5: Noise Module Errors")
-    print("----------------------------\n")
-    print("This test demonstrates the Shor code's ability to correct errors introduced by a noise model")
-    print("that applies bit flip errors with a certain probability during id gates.\n")
-
-    # Create circuit with a logical |0⟩ state
-    circuit, q, c = create_shor_encoded_state([1, 0])
-    circuit.barrier(q)
-
-    # Get the ideal state before error
-    ideal_sv = get_statevector(circuit)
-
-    # Add id gates to all qubits to introduce noise
-    for i in range(9):
-        circuit.id(q[i])
-    circuit.barrier(q)
-
-    # Create noise model with bit flip errors
-    p_err = 1 # 10% probability of bit flip error
-    bit_flip_error = pauli_error([('X', p_err), ('I', 1 - p_err)])
-    noise_model = NoiseModel()
-    noise_model.add_all_qubit_quantum_error(bit_flip_error, ['id'])
-
-    # Get the corrupted state
-    corrupted_sv = get_statevector(circuit)
-
-    # Decode the state
-    circuit = decode_shor_code(circuit, q, c)
-    circuit.barrier(q)
-
-    # Measure
-    for i in range(9):
-        circuit.measure(q[i], c[i])
-
-    # Draw the circuit
-    circuit.draw(output='mpl', filename=get_image_path('test5_noise_module_correction.png'))
-
-    # Execute with noise model
-    backend = Aer.get_backend('qasm_simulator')
-    job = execute(circuit, backend, shots=1000, noise_model=noise_model)
-    counts = job.result().get_counts()
-    plot_results(counts, "Test 5: Noise Module Correction Results", "test5_noise_module_histogram")
-
-    # Calculate fidelity between ideal and corrupted state
-    noise_fidelity = state_fidelity(ideal_sv, corrupted_sv)
-    print(f"counts: {counts}")
-
-    print(f"### Results:")
-    print(f"- Measurement results: {counts}")
-    print(f"- Fidelity between ideal and corrupted state: {noise_fidelity:.6f}")
-    print(f"- Expected outcome: Successful correction with high probability of measuring |0⟩")
-    print("\nConclusion: The Shor code successfully corrects errors introduced by the noise model.\n")
-
-    return {
-        'counts': counts,
-        'fidelity': noise_fidelity
-    }
+    """Run the bit flip test."""
+    test = NoiseModuleTest(p_err=0)
+    return test.run_test()
 
 if __name__ == "__main__":
     run_test() 
