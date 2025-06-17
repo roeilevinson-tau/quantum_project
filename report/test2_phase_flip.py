@@ -1,8 +1,7 @@
 from utils import (
-    create_shor_encoded_state, decode_shor_code, get_statevector,
+    create_shor_encoded_state, decode_shor_code,
     run_circuit, plot_results, get_image_path
 )
-from qiskit.quantum_info import state_fidelity
 import numpy as np
 
 def run_test():
@@ -15,15 +14,9 @@ def run_test():
     circuit, q, c = create_shor_encoded_state([1/np.sqrt(2), 1/np.sqrt(2)])
     circuit.barrier(q)
 
-    # Get the ideal state before error
-    ideal_sv = get_statevector(circuit)
-
     # Insert a Z error on the first qubit
     circuit.z(q[0])
     circuit.barrier(q)
-
-    # Get the corrupted state
-    corrupted_sv = get_statevector(circuit)
 
     # Decode the state
     circuit = decode_shor_code(circuit, q, c)
@@ -43,18 +36,13 @@ def run_test():
     counts = run_circuit(circuit)
     plot_results(counts, "Test 2: Phase Flip Correction Results", "test2_phase_flip_histogram")
 
-    # Calculate fidelity between ideal and corrupted state
-    phase_flip_fidelity = state_fidelity(ideal_sv, corrupted_sv)
-
     print(f"### Results:")
     print(f"- Measurement results: {counts}")
-    print(f"- Fidelity between ideal and corrupted state: {phase_flip_fidelity:.6f}")
     print(f"- Expected outcome: Successful correction with high probability of measuring |0⟩")
     print("\nConclusion: The Shor code successfully corrects a single phase flip error.\n")
 
     return {
-        'counts': counts,
-        'fidelity': phase_flip_fidelity
+        'counts': counts
     }
 
 if __name__ == "__main__":
