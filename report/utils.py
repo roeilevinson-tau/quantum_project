@@ -33,7 +33,7 @@ def create_shor_encoded_state(initial_state=[1, 0]):
     initial_state = [initial_state[0]/norm, initial_state[1]/norm]
     
     q = QuantumRegister(9, 'q')
-    c = ClassicalRegister(1, 'c')
+    c = ClassicalRegister(9, 'c')
     circuit = QuantumCircuit(q, c)
     
     # Initialize the first qubit to our chosen state
