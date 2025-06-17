@@ -5,62 +5,81 @@ import numpy as np
 class NoiseModuleTest(ShorECTest):
     DEFAULT_TEST_NAME = "noise_module_test"
     
-    def __init__(self, initial_state=[1, 0], test_name=None, should_ec_fail=False, p_err=0):
-        """
-        Initialize the noise module test.
-        
-        Args:
-            initial_state (list): List of 2 complex numbers for the |0⟩ and |1⟩ amplitudes
-            test_name (str): Name of the test for file naming
-            should_ec_fail (bool): Whether the error correction should fail
-            p_err (float): Probability of bit flip error (0 to 1)
-        """
-        self.p_err = p_err
-        super().__init__(initial_state, test_name, should_ec_fail)
-    
-    def noise_module_init(self):
+    def noise_module_init(self, p_err=0):
         """Initialize the noise module with bit flip errors."""
         # Create noise model with bit flip errors
-        bit_flip_error = pauli_error([('X', self.p_err), ('I', 1 - self.p_err)])
+        bit_flip_error = pauli_error([('X', p_err), ('I', 1 - p_err)])
         self._noise_module = NoiseModel()
-        self._noise_module.add_all_qubit_quantum_error(bit_flip_error, ['id'])
+        # self._noise_module.add_all_qubit_quantum_error(bit_flip_error, ['id'])
+        self._noise_module.add_all_qubit_quantum_error(bit_flip_error, ['delay'])
     
     def custom_circuit_logic(self):
         """Apply id gates to all qubits to introduce noise."""
         for i in range(9):
-            self.circuit.id(self.q[i])
+            self.circuit.delay(1, self.q[i], unit='dt')  # Forces a scheduled idle time
         self.circuit.barrier(self.q)
+    
+    def calculate_win_rate(self, counts):
+        """Calculate the win rate from measurement results.
+        
+        Args:
+            counts (dict): Dictionary of measurement results
+            
+        Returns:
+            float: Win rate as a percentage
+        """
+        total_shots = sum(counts.values())
+        wins = sum(count for key, count in counts.items() if int(key[-1]) == 0)
+        return (wins / total_shots) * 100 if total_shots > 0 else 0
+    
+    def run_single_test(self, p_err):
+        """Run a single test with given error probability.
+        
+        Args:
+            p_err (float): Error probability to test
+            
+        Returns:
+            float: Win rate as a percentage
+        """
+        self.noise_module_init(p_err)
+        counts = self.run_simulation()
+        return self.calculate_win_rate(counts)
 
+    def check_ec(self, counts):
+        """Check if error correction was successful.
+        
+        Args:
+            counts (dict): Dictionary of measurement results
+            
+        Returns:
+        """
+        pass
+    
     def run_test(self):
-        """Test 5: Noise Module Errors"""
-        print("\n## Test 5: Noise Module Errors")
-        print("----------------------------\n")
-        print("This test demonstrates the Shor code's ability to correct errors introduced by a noise model")
-        print("that applies bit flip errors with a certain probability during id gates.\n")
+        """Test 5: Noise Module Error Sweep"""
+        print("\n## Test 5: Noise Module Error Sweep")
+        print("--------------------------------\n")
+        print("This test demonstrates how the Shor code's error correction capability")
+        print("varies with different error probabilities in the noise model.\n")
         
         # Draw the circuit
         self.draw()
         
-        # Execute and get results
-        counts = self.run_simulation()
+        # Perform sweep over error probabilities
+        error_probs = np.linspace(0.0, 1.0, 4)
+        print("Error Probability (%) | Win Rate (%)")
+        print("---------------------|-------------")
         
-        # Calculate fidelity between ideal and corrupted state
-        noise_fidelity = self.get_state_fidelity()
+        for p_err in error_probs:
+            win_rate = self.run_single_test(p_err)
+            print(f"{p_err*100:19.1f} | {win_rate:11.1f}")
         
-        print(f"### Results:")
-        print(f"- Measurement results: {counts}")
-        print(f"- Fidelity between ideal and corrupted state: {noise_fidelity:.6f}")
-        print(f"- Expected outcome: Successful correction with high probability of measuring |0⟩")
-        print("\nConclusion: The Shor code successfully corrects errors introduced by the noise model.\n")
-        
-        return {
-            'counts': counts,
-            'fidelity': noise_fidelity
-        }
+        print("\nConclusion: The Shor code's error correction capability degrades as the error probability increases.\n")
+
 
 def run_test():
-    """Run the bit flip test."""
-    test = NoiseModuleTest(p_err=0)
+    """Run the noise module test."""
+    test = NoiseModuleTest()
     return test.run_test()
 
 if __name__ == "__main__":

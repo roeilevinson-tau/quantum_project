@@ -1,4 +1,4 @@
-from qiskit import QuantumRegister, ClassicalRegister, QuantumCircuit, execute, Aer
+from qiskit import QuantumRegister, ClassicalRegister, QuantumCircuit, execute, Aer, transpile
 from qiskit.tools.monitor import job_monitor
 import matplotlib.pyplot as plt
 import numpy as np
@@ -9,6 +9,7 @@ from colorama import Fore, Style
 # Get the backend simulator
 aer_sim = Aer.get_backend('aer_simulator')
 sv_sim = Aer.get_backend('statevector_simulator')
+
 
 class ShorECTest:
     DEFAULT_TEST_NAME = "override_this_string"
@@ -38,7 +39,7 @@ class ShorECTest:
         # Build the circuit
         self._build_circuit()
     
-    def noise_module_init(self):
+    def noise_module_init(self, p_err):
         """Initialize the noise module. Override this method to set up noise."""
         self._noise_module = None
     
@@ -128,7 +129,8 @@ class ShorECTest:
     
     def run_simulation(self, shots=1000):
         """Run the circuit simulation and return the counts."""
-        job = execute(self.circuit, aer_sim, shots=shots, noise_model=self._noise_module)
+        compiled_circuit = transpile(self.circuit, aer_sim, optimization_level=0)
+        job = execute(compiled_circuit, aer_sim, shots=shots, noise_model=self._noise_module)
         job_monitor(job)
         counts = job.result().get_counts()
         self.plot_results(counts, f"{self._test_name} Results", f"{self._test_name}_histogram")
@@ -170,19 +172,16 @@ class ShorECTest:
         Returns:
             bool: True if error correction was successful, False otherwise
         """
-
-        
         # Check if all measurements are 0
         all_zeros = all(int(key[-1]) == 0 for key in counts.keys())
         # If should_ec_fail is True, we expect failure (all_zeros should be False)
         # If should_ec_fail is False, we expect success (all_zeros should be True)
         success = all_zeros != self._should_ec_fail
-        if self._should_ec_fail is not None:
-            # Print colored result
-            if success:
-                print(f"{Fore.GREEN}Test Succeeded{Style.RESET_ALL}")
-            else:
-                print(f"{Fore.RED}Test Failed{Style.RESET_ALL}")
+        # Print colored result
+        if success:
+            print(f"{Fore.GREEN}Test Succeeded{Style.RESET_ALL}")
+        else:
+            print(f"{Fore.RED}Test Failed{Style.RESET_ALL}")
             
         return success
 
