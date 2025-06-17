@@ -13,16 +13,15 @@ def run_test():
     circuit, q, c = create_shor_encoded_state([1, 0])
     circuit.barrier(q)
 
-    # Insert two errors in the first block
-    # In the first block (qubits 0,1,2), we flip qubits 0 and 1
-    # This means 2 qubits vote for |1⟩ and 1 qubit votes for |0⟩
-    # The majority voting will incorrectly decide the block is in state |1⟩
-    print("Applying X errors to qubits 0 and 1 in the first block")
-    circuit.x(q[0])
-    circuit.x(q[1])
+    # Insert three bit flip errors in the first block
+    # This will definitely break the majority voting
+    print("Applying X errors to all three qubits in the first block")
+    circuit.x(q[0])  # Flip first qubit
+    circuit.x(q[1])  # Flip second qubit
+    circuit.x(q[2])  # Flip third qubit - this makes all qubits in the block flipped
     circuit.barrier(q)
 
-    # Decode the state - this should fail due to incorrect majority voting
+    # Decode the state - this should fail as all qubits in the block are flipped
     circuit = decode_shor_code(circuit, q, c)
     circuit.barrier(q)
 
@@ -41,11 +40,9 @@ def run_test():
     print(f"- Expected outcome: Failed correction with high probability of measuring |1⟩")
     print("\nExplanation:")
     print("1. We started with logical |0⟩ state")
-    print("2. Applied X errors to qubits 0 and 1 in the first block")
-    print("3. This causes majority voting to fail because 2 qubits vote for |1⟩ and 1 for |0⟩")
-    print("4. The error correction incorrectly 'corrects' to |1⟩ instead of |0⟩")
-    print("\nThis demonstrates a fundamental limitation of the Shor code:")
-    print("It cannot correct multiple bit flips within the same 3-qubit block")
+    print("2. Applied X errors to ALL qubits in the first block (qubits 0, 1, and 2)")
+    print("3. This completely inverts the state of the first block")
+    print("4. The majority voting will see all qubits as |1⟩ and incorrectly assume this is the correct state")
 
     return {
         'counts': counts

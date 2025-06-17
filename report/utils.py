@@ -89,7 +89,7 @@ def decode_shor_code(circuit, q, c):
     circuit.ccx(q[3], q[6], q[0])  # Majority vote
     
     # Convert back to computational basis
-    circuit.h(q[0])
+    #circuit.h(q[0])
     
     return circuit
 
