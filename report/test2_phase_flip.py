@@ -1,4 +1,4 @@
-from utils import ShorECTest
+from shor_ec_test import ShorECTest
 import numpy as np
 
 class PhaseFlipTest(ShorECTest):

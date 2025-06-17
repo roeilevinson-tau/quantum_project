@@ -1,5 +1,4 @@
-from utils import ShorECTest
-from qiskit.quantum_info import state_fidelity
+from shor_ec_test import ShorECTest
 
 class MultipleErrorsTest(ShorECTest):
     DEFAULT_TEST_NAME = "multiple_errors"
@@ -49,7 +48,7 @@ class MultipleErrorsTest(ShorECTest):
 
 def run_test():
     """Run the multiple errors test."""
-    test = MultipleErrorsTest([1, 0])
+    test = MultipleErrorsTest([1, 0], should_ec_fail=True)
     return test.run_test()
 
 if __name__ == "__main__":

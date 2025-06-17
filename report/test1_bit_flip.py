@@ -1,4 +1,4 @@
-from utils import ShorECTest
+from shor_ec_test import ShorECTest
 
 class BitFlipTest(ShorECTest):
     DEFAULT_TEST_NAME = "bit_flip_correction"
