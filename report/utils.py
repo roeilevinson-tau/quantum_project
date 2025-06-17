@@ -107,10 +107,8 @@ class ShorECTest:
         self.circuit.cx(self.q[0], self.q[6])
         self.circuit.ccx(self.q[3], self.q[6], self.q[0])
         
-        # Convert back to computational basis
-        self.circuit.h(self.q[0])
-        
         self.circuit.barrier(self.q)
+
         self._final_state = Statevector.from_instruction(self.circuit)
     
     def draw(self):
