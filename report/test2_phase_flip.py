@@ -28,18 +28,14 @@ class PhaseFlipTest(ShorECTest):
         # Execute and get results
         counts = self.run_simulation()
         
-        # Calculate fidelity between ideal and corrupted state
-        phase_flip_fidelity = self.get_state_fidelity()
         
         print(f"### Results:")
         print(f"- Measurement results: {counts}")
-        print(f"- Fidelity between ideal and corrupted state: {phase_flip_fidelity:.6f}")
         print(f"- Expected outcome: Successful correction with high probability of measuring |0⟩")
         print("\nConclusion: The Shor code successfully corrects a single phase flip error.\n")
         
         return {
             'counts': counts,
-            'fidelity': phase_flip_fidelity
         }
 
 def run_test():

@@ -2,7 +2,7 @@ from qiskit import QuantumRegister, ClassicalRegister, QuantumCircuit, execute, 
 from qiskit.tools.monitor import job_monitor
 import matplotlib.pyplot as plt
 import numpy as np
-from qiskit.quantum_info import state_fidelity, Statevector
+from qiskit.quantum_info import Statevector
 import os
 
 # Get the backend simulator
@@ -126,12 +126,6 @@ class ShorECTest:
     def get_statevector(self):
         """Get the statevector of the circuit."""
         return Statevector.from_instruction(self.circuit)
-
-    def get_state_fidelity(self):
-        """Get the state fidelity of the circuit."""
-        if self._initial_state is None or self._final_state is None:
-            raise ValueError("Statevectors not initialized. Run the circuit first.")
-        return state_fidelity(self._initial_state, self._final_state)
 
     def plot_results(self, results_dict, title, filename=None):
         """Visualize measurement results."""

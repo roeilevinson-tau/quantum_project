@@ -291,12 +291,9 @@ circuit.draw(output='mpl', filename=get_image_path('test4_multiple_errors.png'))
 counts = run_circuit(circuit)
 plot_results(counts, "Test 4: Multiple Errors Results")
 
-# Calculate fidelity between ideal and corrupted state
-multiple_errors_fidelity = state_fidelity(ideal_sv, corrupted_sv)
 
 print(f"### Results:")
 print(f"- Measurement results: {counts}")
-print(f"- Fidelity between ideal and corrupted state: {multiple_errors_fidelity:.6f}")
 print(f"- Expected outcome: Failed correction with significant probability of measuring |1⟩")
 print("\nConclusion: The Shor code fails when multiple errors occur beyond its correction capability.\n")
 print("The Shor code can correct at most one error of each type (bit flip and phase flip). ")
