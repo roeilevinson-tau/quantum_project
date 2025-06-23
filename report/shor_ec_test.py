@@ -39,9 +39,9 @@ class ShorECTest:
         # Build the circuit
         self._build_circuit()
     
-    def noise_module_init(self, p_err):
+    def noise_module_init(self, p_err=None):
         """Initialize the noise module. Override this method to set up noise."""
-        self._noise_module = None
+        self._noise_module = p_err
     
     def _build_circuit(self):
         """Build the complete circuit with encoding, custom logic, and decoding."""
