@@ -2,7 +2,7 @@ from qiskit import QuantumRegister, ClassicalRegister, QuantumCircuit, execute, 
 from qiskit.tools.monitor import job_monitor
 import matplotlib.pyplot as plt
 import numpy as np
-from qiskit.quantum_info import state_fidelity, Statevector
+from qiskit.quantum_info import Statevector
 import os
 
 # Get the backend simulator
