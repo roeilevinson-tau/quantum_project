@@ -1,0 +1,91 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Quantum Technology Project}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Magic Square Game}
+
+\subsection{The 3 × 3 Mermin–Peres Magic Square Game}
+
+The Mermin–Peres Magic Square Game is a cooperative two-player quantum pseudo-telepathy game that demonstrates the non-local properties of quantum mechanics. In this game, two players (traditionally called Alice and Bob) attempt to fill a 3 × 3 grid with binary values (0 or 1) according to specific rules, without communicating once the game begins.
+
+The rules of the game are as follows:
+
+\begin{enumerate}
+    \item A referee randomly selects a row $i$ for Alice and a column $j$ for Bob from the 3 × 3 grid.
+    \item Alice must fill her assigned row with binary values such that the parity (sum modulo 2) of her entries is even (0).
+    \item Bob must fill his assigned column with binary values such that the parity of his entries is odd (1).
+    \item The players win if the value they both assign to the intersection cell $(i,j)$ is the same.
+\end{enumerate}
+
+Classically, it is impossible to win this game with certainty. This can be proven by contradiction: If we attempt to construct a 3 × 3 grid where each row has even parity and each column has odd parity, we reach a logical impossibility. The total parity of the grid calculated row-by-row would be 0 (as each row has even parity), while the total parity calculated column-by-column would be 1 (as each column has odd parity). Since these must be equal, we have a contradiction.
+
+The best classical strategy achieves a winning probability of at most 8/9 (approximately 89\%).
+
+However, using quantum mechanics, Alice and Bob can win this game with 100\% certainty. They achieve this by sharing an entangled quantum state and performing specific measurements based on their assigned row or column. The measurements correspond to observables represented by Pauli operators, arranged in a 3 × 3 grid:
+
+\begin{equation}
+\begin{pmatrix}
+\sigma_x \otimes \sigma_x & \sigma_x \otimes \sigma_y & \sigma_x \otimes \sigma_z \\
+\sigma_y \otimes \sigma_x & \sigma_y \otimes \sigma_y & \sigma_y \otimes \sigma_z \\
+\sigma_z \otimes \sigma_x & \sigma_z \otimes \sigma_y & \sigma_z \otimes \sigma_z
+\end{pmatrix}
+\end{equation}
+
+These observables have the remarkable property that operators in each row commute and multiply to give the identity (I), while operators in each column commute and multiply to give negative identity (-I). This corresponds exactly to the parity constraints of the game.
+
+This perfect quantum strategy demonstrates a fundamental separation between classical and quantum physics, showing that entanglement allows for correlations that cannot be explained by any local hidden variable theory.
+
+\subsection{The GHZ Version of the Magic Square Game}
+
+The Greenberger-Horne-Zeilinger (GHZ) version of the Magic Square Game is an alternative formulation that uses three players instead of two, and is based on the famous GHZ paradox. This version provides an even more striking demonstration of quantum non-locality.
+
+In the GHZ version:
+
+\begin{enumerate}
+    \item Three players (Alice, Bob, and Charlie) share a three-qubit GHZ state: $|GHZ\rangle = \frac{1}{\sqrt{2}}(|000\rangle + |111\rangle)$.
+    \item Each player is assigned one of the three qubits.
+    \item The referee randomly selects one of four possible measurement scenarios.
+    \item Based on the scenario, each player performs either an X or Y measurement on their qubit.
+    \item The players win if their measurement outcomes satisfy a specific parity constraint that depends on the scenario.
+\end{enumerate}
+
+The four measurement scenarios and their corresponding winning conditions are:
+
+\begin{enumerate}
+    \item All players measure X: The product of outcomes must be +1
+    \item Alice measures X, Bob and Charlie measure Y: The product of outcomes must be -1
+    \item Bob measures X, Alice and Charlie measure Y: The product of outcomes must be -1
+    \item Charlie measures X, Alice and Bob measure Y: The product of outcomes must be -1
+\end{enumerate}
+
+Classically, it is impossible to satisfy all four constraints simultaneously. This can be proven by assuming the existence of predetermined measurement outcomes and showing that they lead to a contradiction. If we denote the predetermined outcomes as $a_X$, $a_Y$, $b_X$, $b_Y$, $c_X$, and $c_Y$ (where each value is either +1 or -1), then the four constraints would require:
+
+\begin{align}
+a_X \cdot b_X \cdot c_X &= +1 \\
+a_X \cdot b_Y \cdot c_Y &= -1 \\
+a_Y \cdot b_X \cdot c_Y &= -1 \\
+a_Y \cdot b_Y \cdot c_X &= -1
+\end{align}
+
+Multiplying these four equations together, the left side gives $(a_X \cdot a_Y \cdot b_X \cdot b_Y \cdot c_X \cdot c_Y)^2 = +1$ (since each term appears twice), while the right side gives $+1 \cdot (-1) \cdot (-1) \cdot (-1) = -1$. This contradiction proves that no classical strategy can win with certainty.
+
+However, quantum mechanically, the players can win with 100\% probability by performing the appropriate measurements on their shared GHZ state. This perfect quantum strategy relies on the fact that the X and Y Pauli operators, when applied to the GHZ state, produce the exact correlation patterns required by the game.
+
+The GHZ version of the Magic Square Game is particularly powerful because it demonstrates a contradiction between quantum mechanics and local realism without requiring statistical analysis of correlations. A single run of the experiment is sufficient to reveal the non-classical nature of quantum mechanics, making it one of the most elegant demonstrations of quantum non-locality.
+
+\end{document}

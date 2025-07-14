@@ -1,0 +1,125 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Quantum Technology Project}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{CHSH Inequality Violation}
+
+
+\subsection{Bell's Theorem and Quantum Mechanics}
+Bell's theorem is a fundamental principle in quantum mechanics that addresses the nature of reality at the quantum level. It proves that no local hidden variable theory can reproduce all quantum mechanical predictions, demonstrating that quantum mechanics cannot be simultaneously local and realistic.
+
+The theorem establishes that quantum entanglement produces correlations between particles that are stronger than any possible classical correlation. These non-classical correlations, experimentally verified through Bell inequality violations, confirm the non-local nature of quantum mechanics and definitively rule out local realistic theories as complete descriptions of quantum phenomena.
+
+This result represents one of the most profound insights in quantum mechanics, establishing that quantum systems behave in ways fundamentally different from classical physics in their description of reality.
+
+\subsection{Mathematical Formulation of the CHSH Inequality}
+
+The CHSH (Clauser-Horne-Shimony-Holt) inequality provides a mathematical framework for testing Bell's theorem experimentally. It quantifies the maximum correlation strength possible under any local hidden variable theory.
+
+Mathematically, the CHSH inequality is expressed as:
+\begin{equation}
+S = |E(a,b) - E(a,b') + E(a',b) + E(a',b')| \leq 2
+\end{equation}
+
+Where:
+\begin{itemize}
+    \item $E(a,b)$ represents the expectation value of the product of measurement outcomes when Alice measures in direction $a$ and Bob measures in direction $b$
+    \item $a$ and $a'$ are two possible measurement settings for Alice
+    \item $b$ and $b'$ are two possible measurement settings for Bob
+\end{itemize}
+
+For any local hidden variable theory, this inequality must be satisfied with the upper bound of 2. However, quantum mechanics predicts that entangled states can violate this inequality, reaching a maximum value of $2\sqrt{2} \approx 2.82$ (known as Tsirelson's bound) when measurements are performed at specific angles.
+
+This violation occurs because quantum entanglement creates stronger correlations between particles than any classical mechanism can produce. The experimental verification of CHSH inequality violations provides compelling evidence against local realism and confirms the non-local nature of quantum mechanics.
+
+\subsection{Implementation of CHSH Inequality}
+
+To experimentally demonstrate the violation of the CHSH inequality, we implemented a quantum circuit using Qiskit that creates an entangled Bell state and performs measurements in different bases. This allows us to compare classical and quantum scenarios directly.
+
+\subsubsection{Circuit Design}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{images/part1_chsh_circuit.png}
+\caption{Implementation of the CHSH inequality test circuit}
+\label{fig:chsh_circuit}
+\end{figure}
+
+The circuit shown in Figure \ref{fig:chsh_circuit} creates an entangled Bell state $|\Phi^+\rangle = \frac{|00\rangle + |11\rangle}{\sqrt{2}}$ between two qubits. This is achieved by:
+
+\begin{enumerate}
+    \item Applying a Hadamard gate to the first qubit, creating a superposition state
+    \item Using a CNOT gate with the first qubit as control and the second as target, creating entanglement
+    \item Applying a parameterized rotation $R_y(\theta)$ to the first qubit, which allows us to vary the measurement basis
+\end{enumerate}
+
+The parameter $\theta$ is swept from 0 to $2\pi$ to explore different measurement configurations. For each value of $\theta$, we measure the expectation values needed to calculate the CHSH quantities:
+
+\begin{equation}
+S_1 = \langle AB \rangle - \langle Ab \rangle + \langle aB \rangle + \langle ab \rangle
+\end{equation}
+
+\begin{equation}
+S_2 = \langle AB \rangle + \langle Ab \rangle - \langle aB \rangle + \langle ab \rangle
+\end{equation}
+
+Where $A$ and $a$ represent two different measurement bases for the first qubit, while $B$ and $b$ represent two different measurement bases for the second qubit.
+
+\subsubsection{Classical vs. Quantum Bounds}
+
+According to classical physics and local hidden variable theories, the CHSH inequality states that:
+
+\begin{equation}
+|S_1| \leq 2 \quad \text{and} \quad |S_2| \leq 2
+\end{equation}
+
+However, quantum mechanics predicts that these inequalities can be violated, with a maximum possible value of $2\sqrt{2} \approx 2.82$ (known as Tsirelson's bound).
+
+\subsubsection{Experimental Results}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{images/part1_chsh_results_plot.png}
+\caption{CHSH inequality violation results}
+\label{fig:chsh_results}
+\end{figure}
+
+Our experimental results, shown in Figure \ref{fig:chsh_results}, demonstrate a clear violation of the CHSH inequality. In the figure, the lines and gray areas delimit the bounds; the outer-most (dash-dotted) lines delimit the quantum-bounds ($\pm 2\sqrt{2}$), whereas the inner (dashed) lines delimit the classical bounds ($\pm 2$). You can see that there are regions where the CHSH witness quantities exceeds the classical bounds. Congratulations! You have successfully demonstrated the violation of CHSH inequality in a real quantum system!
+
+This violation occurs at specific values of $\theta$, particularly around $\theta = \pi/4$ and $\theta = 3\pi/4$, where the measurement bases are optimally aligned to reveal the non-classical correlations inherent in the entangled state. The plot shows both CHSH1 and CHSH2 quantities, with both exceeding the classical bounds at various angles, confirming the quantum nature of the system.
+
+\subsubsection{Significance of Results}
+
+The experimental violation of the CHSH inequality has profound implications:
+
+\begin{itemize}
+    \item It provides direct evidence against local hidden variable theories
+    \item It confirms the non-local nature of quantum entanglement
+    \item It demonstrates that quantum correlations are fundamentally stronger than any possible classical correlation
+    \item It validates Bell's theorem experimentally, showing that quantum mechanics cannot be both local and realistic
+\end{itemize}
+
+This experiment, performed on actual quantum hardware, represents one of the most fundamental tests of quantum mechanics versus classical physics, and conclusively shows that our universe operates according to principles that defy classical intuition.
+
+
+
+
+
+
+
+\end{document}

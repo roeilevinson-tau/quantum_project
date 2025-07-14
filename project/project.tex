@@ -1,0 +1,207 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Quantum Technology Project}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Part 1}
+
+\subsection{Quantum Teleportation}
+
+\subsubsection{Section A}
+Figure \ref{fig:teleportation_circuit} shows the implementation of the quantum teleportation circuit.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{images/part1_quantum_teleportation_section_a_circut}
+\caption{Implementation of the quantum teleportation circuit}
+\label{fig:teleportation_circuit}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{images/part1_quantum_teleporatation_section_a_results}
+\caption{Measurement results from quantum teleportation circuit (1024 shots)}
+\label{fig:teleportation_results}
+\end{figure}
+
+The histogram in Figure \ref{fig:teleportation_results} shows the measurement outcomes from running the quantum teleportation circuit 1024 times. We observe four possible measurement outcomes: '000', '001', '010', and '011'.
+
+The most frequent outcome is '000' with 271 counts (approximately 26.5% of shots), followed by '011' with 262 counts (25.6%), '001' with 246 counts (24%), and '010' with 245 counts (23.9%).
+
+The relatively even distribution between these states suggests the quantum teleportation protocol is working as expected, with the correction operations successfully teleporting the initial state. The small variations in counts can be attributed to quantum noise and statistical fluctuations in the measurements.
+
+
+\subsubsection{Section B - Quantum State Tomography}
+
+Quantum State Tomography (QST) is a crucial experimental technique used to fully characterize a quantum state by reconstructing its density matrix. The process involves three key steps:
+
+\begin{enumerate}
+    \item \textbf{State Preparation:} Multiple identical copies of the quantum state must be prepared. This is necessary because quantum measurement is destructive, and we need to perform multiple measurements to gather sufficient statistics.
+    
+    \item \textbf{Measurement in Different Bases:} Each copy of the state is measured in different measurement bases. This is essential because a single measurement basis cannot provide complete information about the quantum state. By measuring in complementary bases, we can gather information about different aspects of the state.
+    
+    \item \textbf{Density Matrix Reconstruction:} The measurement statistics from these different bases are then used to mathematically reconstruct the complete density matrix that describes the quantum state. This reconstruction process typically involves solving an optimization problem to find the physical density matrix that best fits the observed measurement data.
+\end{enumerate}
+
+QST is particularly important in quantum computing and quantum information processing as it allows us to verify the preparation of desired quantum states and characterize the quality of quantum operations. However, it becomes increasingly challenging as the system size grows, requiring an exponentially larger number of measurements.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{images/part1_quantum_teleporatation_section_a_density_matrix.png}
+\caption{Density matrix representation of the teleported quantum state}
+\label{fig:teleportation_density_matrix}
+\end{figure}
+
+Figure \ref{fig:teleportation_density_matrix} shows the density matrix representation of our teleported quantum state. The density matrix provides a complete description of the quantum state, including both pure and mixed state characteristics. 
+
+In this visualization, the x and y axes represent the basis states of our quantum system, while the height and color intensity of each bar indicate the magnitude of the corresponding density matrix element. The diagonal elements represent the probabilities of finding the system in each basis state, while the off-diagonal elements capture the quantum coherences between different basis states.
+
+The prominent diagonal elements confirm the measurement statistics we observed in the histogram (Figure \ref{fig:teleportation_results}). The presence of significant off-diagonal elements indicates that quantum coherence has been preserved during the teleportation process, which is a critical requirement for successful quantum teleportation.
+
+The fidelity between our teleported state and the theoretical target state can be calculated from this density matrix, providing a quantitative measure of the teleportation quality. Any deviations from the ideal density matrix can be attributed to noise in the quantum circuit, imperfect gate operations, and decoherence effects during the teleportation process.
+
+
+\subsubsection{Section B - With Dynamic Circuits (Measurement-Conditioned Execution)}
+
+Dynamic circuits, also known as measurement-conditioned execution, represent an advanced quantum computing paradigm where classical control flow can be integrated with quantum operations. This approach allows for real-time decision making during circuit execution based on intermediate measurement results.
+
+In this section, we implement quantum teleportation using Qiskit's classical feedforward capabilities, which enable runtime conditional logic. This approach more closely resembles the theoretical quantum teleportation protocol, where Bob's correction operations are explicitly conditioned on Alice's measurement outcomes.
+
+The key advantages of using dynamic circuits for quantum teleportation include:
+
+\begin{enumerate}
+    \item \textbf{Explicit Classical Communication:} The classical communication channel between Alice and Bob is explicitly modeled through the conditional execution.
+    
+    \item \textbf{Reduced Circuit Depth:} Since correction operations are only applied when necessary (based on measurement outcomes), the overall circuit depth can be reduced.
+    
+    \item \textbf{Improved Fidelity:} By minimizing unnecessary gate operations, the dynamic circuit approach can potentially lead to higher fidelity teleportation, especially on noisy quantum hardware.
+\end{enumerate}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{images/part1_quantum_teleporatation_secrtion_b_circuit}
+\caption{Implementation of quantum teleportation using dynamic circuits with measurement-conditioned execution}
+\label{fig:teleportation_dynamic_circuit}
+\end{figure}
+
+Figure \ref{fig:teleportation_dynamic_circuit} illustrates our implementation of quantum teleportation using dynamic circuits. The circuit begins with the standard teleportation protocol: preparing a superposition state on the sender's qubit, creating entanglement between the communication channel qubits, and performing Bell-basis measurements.
+
+The key difference in this implementation is that the correction operations on Bob's qubit are explicitly conditioned on the measurement results from Alice's qubits. This is achieved using Qiskit's classical feedforward capabilities, where the measurement outcomes are stored in classical registers and then used to control the application of X and Z gates on the receiver's qubit.
+
+After the teleportation process, we perform quantum state tomography on the receiver's qubit to fully characterize the teleported state. This involves measuring the qubit in multiple bases (X, Y, and Z) over many circuit executions to gather sufficient statistics for reconstructing the density matrix.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{images/part1_quantum_teleporatation_section_b_density_matrix}
+\caption{Density matrix of the teleported state using dynamic circuits}
+\label{fig:teleportation_dynamic_density_matrix}
+\end{figure}
+
+Figure \ref{fig:teleportation_dynamic_density_matrix} shows the reconstructed density matrix of the teleported quantum state using our dynamic circuit implementation. The density matrix provides a complete description of the quantum state after teleportation, allowing us to assess the fidelity of the teleportation process.
+
+Comparing this density matrix with the theoretical input state, we observe a high degree of similarity, indicating successful quantum teleportation. The fidelity between the teleported state and the initial superposition state is calculated to be approximately 0.95 (95\%), which demonstrates the effectiveness of the dynamic circuit approach.
+
+The small deviations from perfect fidelity can be attributed to various sources of noise and imperfections in the quantum hardware, including gate errors, decoherence, and readout errors. Nevertheless, the high fidelity achieved confirms that the quantum information was successfully transferred from the sender to the receiver while preserving the quantum properties of the original state.
+
+The use of dynamic circuits with measurement-conditioned execution thus provides a more realistic and potentially more efficient implementation of quantum teleportation, highlighting the importance of classical feedback in quantum protocols.
+
+
+
+
+\section{CHSH Inequality Violation}
+
+
+\subsection{Bell's Theorem and Quantum Mechanics}
+Bell's theorem is a fundamental principle in quantum mechanics that addresses the nature of reality at the quantum level. It proves that no local hidden variable theory can reproduce all quantum mechanical predictions, demonstrating that quantum mechanics cannot be simultaneously local and realistic.
+
+The theorem establishes that quantum entanglement produces correlations between particles that are stronger than any possible classical correlation. These non-classical correlations, experimentally verified through Bell inequality violations, confirm the non-local nature of quantum mechanics and definitively rule out local realistic theories as complete descriptions of quantum phenomena.
+
+This result represents one of the most profound insights in quantum mechanics, establishing that quantum systems behave in ways fundamentally different from classical physics in their description of reality.
+
+\subsection{Mathematical Formulation of the CHSH Inequality}
+
+The CHSH (Clauser-Horne-Shimony-Holt) inequality provides a mathematical framework for testing Bell's theorem experimentally. It quantifies the maximum correlation strength possible under any local hidden variable theory.
+
+Mathematically, the CHSH inequality is expressed as:
+\begin{equation}
+S = |E(a,b) - E(a,b') + E(a',b) + E(a',b')| \leq 2
+\end{equation}
+
+Where:
+\begin{itemize}
+    \item $E(a,b)$ represents the expectation value of the product of measurement outcomes when Alice measures in direction $a$ and Bob measures in direction $b$
+    \item $a$ and $a'$ are two possible measurement settings for Alice
+    \item $b$ and $b'$ are two possible measurement settings for Bob
+\end{itemize}
+
+For any local hidden variable theory, this inequality must be satisfied with the upper bound of 2. However, quantum mechanics predicts that entangled states can violate this inequality, reaching a maximum value of $2\sqrt{2} \approx 2.82$ (known as Tsirelson's bound) when measurements are performed at specific angles.
+
+This violation occurs because quantum entanglement creates stronger correlations between particles than any classical mechanism can produce. The experimental verification of CHSH inequality violations provides compelling evidence against local realism and confirms the non-local nature of quantum mechanics.
+
+
+\subsection{Implementation of CHSH Inequality Experiment}
+
+To demonstrate the violation of the CHSH inequality, we implemented both classical and quantum scenarios using Qiskit. This allows us to directly compare the behavior of classical correlations with quantum entanglement.
+
+\subsubsection{Quantum Circuit Implementation}
+
+For the quantum implementation, we created a circuit that prepares a maximally entangled Bell state $|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)$ and performs measurements in various bases. The circuit design is shown in Figure \ref{fig:chsh_circuit}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{images/part1_chsh_circuit.png}
+\caption{Quantum circuit implementation for testing the CHSH inequality. The circuit prepares a Bell state and measures in different bases corresponding to the angles required for maximal CHSH violation.}
+\label{fig:chsh_circuit}
+\end{figure}
+
+The quantum implementation follows these steps:
+\begin{itemize}
+    \item Create a Bell state using a Hadamard gate followed by a CNOT gate
+    \item Perform measurements in different bases by applying rotation gates before measurement
+    \item Calculate the correlation values $E(a,b)$ for different measurement settings
+    \item Compute the CHSH parameter $S$ from these correlations
+\end{itemize}
+
+For optimal violation of the CHSH inequality, we selected measurement angles that maximize the quantum mechanical prediction:
+\begin{itemize}
+    \item Alice's measurement settings: $a = 0$ and $a' = \pi/2$
+    \item Bob's measurement settings: $b = \pi/4$ and $b' = 3\pi/4$
+\end{itemize}
+
+\subsubsection{Classical vs. Quantum Results}
+
+Figure \ref{fig:chsh_results} shows the comparison between classical and quantum scenarios for the CHSH inequality.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{images/part1_chsh_results_plot.png}
+\caption{Comparison of CHSH inequality values for classical and quantum scenarios. The classical scenario respects the inequality bound of 2, while the quantum implementation violates it, approaching the theoretical maximum of $2\sqrt{2}$.}
+\label{fig:chsh_results}
+\end{figure}
+
+Our experimental results demonstrate:
+\begin{itemize}
+    \item The classical implementation consistently produces CHSH values below 2, respecting the inequality as expected for any local hidden variable theory
+    \item The quantum implementation achieves a CHSH value of approximately 2.7, clearly violating the classical bound of 2 and approaching the theoretical quantum maximum of $2\sqrt{2} \approx 2.82$
+    \item The small gap between our experimental value and the theoretical maximum can be attributed to noise and imperfections in the quantum hardware
+\end{itemize}
+
+These results provide a concrete demonstration of quantum non-locality and the fundamental difference between classical and quantum correlations. The violation of the CHSH inequality confirms that quantum entanglement produces correlations that cannot be explained by any local realistic theory, validating Bell's theorem experimentally.
+
+
+
+\end{document}
